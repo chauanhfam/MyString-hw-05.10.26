@@ -1,9 +1,10 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS
 #include "MyString.h"
 using namespace std;
-int MyString::count = 0;
 
-MyString::MyString() : length(30)
+int MyString::count = 0; 
+
+MyString::MyString() : length(80)
 {
     str = new char[length + 1];
     str[0] = '\0';
@@ -12,6 +13,7 @@ MyString::MyString() : length(30)
 
 MyString::MyString(int size)
 {
+    length = size;
     str = new char[length + 1];
     str[0] = '\0';
     count++;
@@ -61,7 +63,7 @@ void MyString::Output() const
 
 bool MyString::MyStrStr(const char* searchStr) const
 {
-    return strstr(str, searchStr) != nullptr;
+    return strstr(str, searchStr) != nullptr; 
 }
 
 int MyString::MyChr(char c) const
@@ -73,7 +75,7 @@ int MyString::MyChr(char c) const
             return i;
         }
     }
-    return -1;
+    return -1; 
 }
 
 int MyString::MyStrLen() const
@@ -99,14 +101,20 @@ void MyString::MyDelChr(char c)
     int newLength = 0;
     for (int i = 0; i < length; i++)
     {
-        if (str[i] != c) newLength++;
+        if (str[i] != c) 
+        {
+            newLength++;
+        }
     }
 
     char* temp = new char[newLength + 1];
     int j = 0;
     for (int i = 0; i < length; i++)
     {
-        if (str[i] != c) temp[j++] = str[i];
+        if (str[i] != c) 
+        {
+            temp[j++] = str[i];
+        }
     }
     temp[j] = '\0';
 
@@ -126,12 +134,22 @@ int MyString::MyStrCmp(const MyString& b) const
     {
         return 1;
     }
-    return 0;
+    return 0; 
 }
 
 int MyString::GetCount()
 {
     return count;
+}
+
+const char* MyString::GetStr() const
+{
+    return str;
+}
+
+int MyString::GetLength() const
+{
+    return length;
 }
 
 MyString& MyString::operator=(const MyString& obj)
@@ -147,47 +165,37 @@ MyString& MyString::operator=(const MyString& obj)
     return *this;
 }
 
-MyString MyString::operator+(char c)
+// obj + 'A'
+MyString MyString::operator+(char c) const
 {
-    MyString temp(length + 1);
-    strcpy(temp.str, str);
-    temp.str[length] = c;
-    temp.str[length + 1] = '\0';
-    return temp;
+    char* tempStr = new char[length + 2];
+    strcpy(tempStr, str);
+    tempStr[length] = c;
+    tempStr[length + 1] = '\0';
+
+    MyString tempObj(tempStr);
+    delete[] tempStr;
+    return tempObj;
 }
 
-MyString MyString::operator+(int n)
+// obj + 10
+MyString MyString::operator+(int n) const
 {
-    MyString temp(length + n);
-    strcpy(temp.str, str);
-    for (int i = length; i < length + n; i++)
+    int newLen = length + n;
+    char* tempStr = new char[newLen + 1];
+    strcpy(tempStr, str);
+    for (int i = length; i < newLen; i++)
     {
-        temp.str[i] = ' ';
+        tempStr[i] = ' ';
     }
-    temp.str[length + n] = '\0';
-    return temp;
+    tempStr[newLen] = '\0';
+
+    MyString tempObj(tempStr);
+    delete[] tempStr;
+    return tempObj;
 }
 
-MyString operator+(char c, const MyString& obj)
-{
-    MyString temp(obj.length + 1);
-    temp.str[0] = c;
-    strcpy(temp.str + 1, obj.str);
-    return temp;
-}
-
-MyString operator+(int n, const MyString& obj)
-{
-    MyString temp(obj.length + n);
-    strcpy(temp.str, obj.str);
-    for (int i = obj.length; i < obj.length + n; i++) 
-    {
-        temp.str[i] = ' ';
-    }
-    temp.str[obj.length + n] = '\0';
-    return temp;
-}
-
+// Префіксний інкремент
 MyString& MyString::operator++()
 {
     char* temp = new char[length + 2];
@@ -200,18 +208,63 @@ MyString& MyString::operator++()
     return *this;
 }
 
+// Постфіксний інкремент
 MyString MyString::operator++(int)
 {
-    MyString oldState(*this); 
+    MyString oldState(*this);
 
     char* temp = new char[length + 2];
     strcpy(temp, str);
-    temp[length] = '*'; 
+    temp[length] = '*';
     temp[length + 1] = '\0';
 
     delete[] str;
     str = temp;
     length++;
 
-    return oldState; 
+    return oldState;
+}
+
+char& MyString::operator[](int index)
+{
+    if (index >= 0 && index < length)
+    {
+        return str[index];
+    }
+    return str[length];
+}
+
+//operator()
+void MyString::operator()()
+{
+    this->Input();
+}
+
+// 'A' + obj
+MyString operator+(char c, const MyString& obj)
+{
+    int newLen = obj.GetLength() + 1;
+    char* tempStr = new char[newLen + 1];
+    tempStr[0] = c;
+    strcpy(tempStr + 1, obj.GetStr());
+
+    MyString res(tempStr);
+    delete[] tempStr;
+    return res;
+}
+// 10 + obj
+MyString operator+(int n, const MyString& obj)
+{
+    int newLen = obj.GetLength() + n;
+    char* tempStr = new char[newLen + 1];
+    strcpy(tempStr, obj.GetStr());
+    for (int i = obj.GetLength(); i < newLen; i++)
+    {
+        tempStr[i] = ' ';
+    }
+    tempStr[newLen] = '\0';
+
+    MyString res(tempStr);
+    delete[] tempStr;
+    return res;
 }

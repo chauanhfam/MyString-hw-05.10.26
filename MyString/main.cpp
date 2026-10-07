@@ -9,7 +9,7 @@ int main()
     MyString str1("Hello");
     MyString str2("World");
 
-    str1.MyStrCat(str2);
+    /*str1.MyStrCat(str2);
     cout << "Concatenation: "; 
     str1.Output();
     cout << endl;
@@ -59,7 +59,57 @@ int main()
     base.Output(); 
     cout << endl;
 
-    cout << "\nTotal objects at the end: " << MyString::GetCount() << endl;
+    cout << "\nTotal objects at the end: " << MyString::GetCount() << endl;*/
+
+    
+    cout << "Testing operator():" << endl;
+    MyString str3;
+    str3();
+    cout << "You entered: ";
+    str3.Output();
+    cout << endl << endl;
+
+    cout << "Testing operator[]:" << endl;
+    cout << "First char of str1: " << str1[0] << endl;
+    str1[0] = 'h';
+    cout << "After modification: ";
+    str1.Output();
+    cout << endl;
+
+    cout << "Operators testing:" << endl;
+    MyString base("Test");
+
+    MyString res1 = base + '!';
+    cout << "obj + '!': ";
+    res1.Output();
+    cout << endl;
+
+    MyString res2 = '@' + base;
+    cout << "'@' + obj: ";
+    res2.Output();
+    cout << endl;
+
+    MyString res3 = base + 5;
+    cout << "obj + 5 (added spaces): '";
+    res3.Output();
+    cout << "'" << endl;
+
+    MyString res4 = 3 + base;
+    cout << "3 + obj (added spaces): '";
+    res4.Output();
+    cout << "'" << endl;
+
+    ++base;
+    cout << "++obj (prefix): ";
+    base.Output();
+    cout << endl;
+
+    base++;
+    cout << "obj++ (postfix): ";
+    base.Output();
+    cout << endl;
+
+    cout << "Total objects at the end: " << MyString::GetCount() << endl;
 
     return 0;
 }

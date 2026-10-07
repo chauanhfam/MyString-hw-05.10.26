@@ -23,19 +23,27 @@ public:
     void MyDelChr(char c);
     int MyStrCmp(const MyString& b) const;
 
+    const char* GetStr() const;
+    int GetLength() const;
+
     static int GetCount();
 
-    MyString operator+(char c);
-    MyString operator+(int n); 
+    //check all
+    MyString& operator=(const MyString& obj); 
+    //method[]
+    char& operator[](int index);
+    //method()
+    void operator()();
+    //function obj+ 'A'
+    MyString operator+(char c) const; 
+    //obj + 10
+    MyString operator+(int n) const; 
+    //++obj
+    MyString& operator++(); 
+    //obj++
+    MyString operator++(int);
 
-    MyString& operator++();
-    MyString operator++(int); 
-
-    MyString& operator=(const MyString& obj);
-
-
-
-    friend MyString operator+(char c, const MyString& obj);
-    friend MyString operator+(int n, const MyString& obj);
 };
 
+MyString operator+(char c, const MyString& obj);
+MyString operator+(int n, const MyString& obj);
