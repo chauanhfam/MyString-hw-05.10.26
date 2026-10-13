@@ -43,7 +43,14 @@ public:
     //obj++
     MyString operator++(int);
 
+
+    MyString(std::initializer_list<char> list);
+    MyString(MyString&& obj) noexcept;
+    MyString& operator=(MyString&& obj) noexcept;
 };
 
 MyString operator+(char c, const MyString& obj);
 MyString operator+(int n, const MyString& obj);
+
+std::ostream& operator<<(std::ostream& os, const MyString& obj);
+std::istream& operator>>(std::istream& is, MyString& obj);

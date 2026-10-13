@@ -2,7 +2,7 @@
 #include "MyString.h"
 using namespace std;
 
-int MyString::count = 0; 
+int MyString::count = 0;
 
 MyString::MyString() : length(80)
 {
@@ -21,7 +21,7 @@ MyString::MyString(int size)
 
 MyString::MyString(const char* userStr)
 {
-    length = strlen(userStr);
+    length = (int)strlen(userStr);
     str = new char[length + 1];
     strcpy(str, userStr);
     count++;
@@ -48,7 +48,7 @@ void MyString::Input()
     cin.getline(temp, 1024);
 
     delete[] str;
-    length = strlen(temp);
+    length = (int)strlen(temp); 
     str = new char[length + 1];
     strcpy(str, temp);
 }
@@ -63,19 +63,19 @@ void MyString::Output() const
 
 bool MyString::MyStrStr(const char* searchStr) const
 {
-    return strstr(str, searchStr) != nullptr; 
+    return strstr(str, searchStr) != nullptr;
 }
 
 int MyString::MyChr(char c) const
 {
     for (int i = 0; i < length; i++)
     {
-        if (str[i] == c) 
+        if (str[i] == c)
         {
             return i;
         }
     }
-    return -1; 
+    return -1;
 }
 
 int MyString::MyStrLen() const
@@ -101,7 +101,7 @@ void MyString::MyDelChr(char c)
     int newLength = 0;
     for (int i = 0; i < length; i++)
     {
-        if (str[i] != c) 
+        if (str[i] != c)
         {
             newLength++;
         }
@@ -111,7 +111,7 @@ void MyString::MyDelChr(char c)
     int j = 0;
     for (int i = 0; i < length; i++)
     {
-        if (str[i] != c) 
+        if (str[i] != c)
         {
             temp[j++] = str[i];
         }
@@ -126,15 +126,15 @@ void MyString::MyDelChr(char c)
 int MyString::MyStrCmp(const MyString& b) const
 {
     int res = strcmp(str, b.str);
-    if (res < 0) 
+    if (res < 0)
     {
         return -1;
     }
-    if (res > 0) 
+    if (res > 0)
     {
         return 1;
     }
-    return 0; 
+    return 0;
 }
 
 int MyString::GetCount()
@@ -158,10 +158,13 @@ MyString& MyString::operator=(const MyString& obj)
     {
         return *this;
     }
+
     delete[] str;
+
     length = obj.length;
     str = new char[length + 1];
     strcpy(str, obj.str);
+
     return *this;
 }
 
@@ -252,6 +255,7 @@ MyString operator+(char c, const MyString& obj)
     delete[] tempStr;
     return res;
 }
+
 // 10 + obj
 MyString operator+(int n, const MyString& obj)
 {
@@ -267,4 +271,61 @@ MyString operator+(int n, const MyString& obj)
     MyString res(tempStr);
     delete[] tempStr;
     return res;
+}
+
+ostream& operator<<(ostream& os, const MyString& obj)
+{
+    if (obj.GetStr() != nullptr)
+    {
+        os << obj.GetStr();
+    }
+    return os;
+}
+
+istream& operator>>(istream& is, MyString& obj)
+{
+    char temp[1024];
+    is.getline(temp, 1024);
+
+    obj = MyString(temp);
+    return is;
+}
+// 1. Конструктор з initializer_list
+MyString::MyString(std::initializer_list<char> list)
+{
+    length = (int)list.size();
+    str = new char[length + 1];
+
+    int i = 0;
+    for (char c : list)
+    {
+        str[i++] = c;
+    }
+    str[length] = '\0';
+    count++;
+}
+
+// 2. Конструктор перенесення (Move constructor)
+MyString::MyString(MyString&& obj) noexcept : str(obj.str), length(obj.length)
+{
+    obj.str = nullptr;
+    obj.length = 0;
+    count++;
+}
+
+// 3. Оператор присвоювання з перенесенням (Move assignment)
+MyString& MyString::operator=(MyString&& obj) noexcept
+{
+    if (this == &obj)
+    {
+        return *this;
+    }
+
+    delete[] str;
+    str = obj.str;
+    length = obj.length;
+    obj.str = nullptr;
+    obj.length = 0;
+
+    return *this;
 }

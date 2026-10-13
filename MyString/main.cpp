@@ -1,7 +1,6 @@
 ﻿#include <iostream>
 #include "MyString.h"
 using namespace std;
-
 int main()
 {
     cout << "Total objects: " << MyString::GetCount() << endl;
@@ -109,7 +108,36 @@ int main()
     base.Output();
     cout << endl;
 
-    cout << "Total objects at the end: " << MyString::GetCount() << endl;
+    cout << "Total objects before I/O tests: " << MyString::GetCount() << endl;
 
+    MyString test1;
+    cout << endl;
+    cout << "Enter a string for test1: ";
+    cin >> test1;
+
+    cout << "You entered: " << test1 << endl;
+
+    MyString test2;
+    MyString test3;
+    test3 = test2 = test1;
+
+    cout << "test2 after assignment: " << test2 << endl;
+    cout << "test3 after assignment: " << test3 << endl;
+
+    test1 = test1;
+    cout << "test1 after self-assignment: " << test1 << endl;
+
+    MyString obj{ 'H', 'e', 'l', 'l', 'o' };
+    cout << "String obj: " << obj << endl << endl;
+
+    // Конструктор перенесення
+    MyString movedObj = MyString{ 'T', 'e', 's', 't' };
+    cout << "String movedObj: " << movedObj << endl << endl;
+
+    // Оператор присвоювання з перенесенням
+    MyString targetStr("Old data");
+    cout << "Before: " << targetStr << endl;
+    targetStr = MyString("New data");
+    cout << "After: " << targetStr << endl;
     return 0;
 }
